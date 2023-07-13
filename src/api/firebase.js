@@ -6,7 +6,8 @@ import { getAuth,
         signInWithPopup, 
         GoogleAuthProvider, 
         onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, set } from "firebase/database";
+import {v4 as uuid} from "uuid";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -42,9 +43,20 @@ export async function adminUser(user) {
             if(snapshot.exists()) {
                 const admins = snapshot.val();
                 const isAdmin = admins.admins.includes(user.uid)
-                console.log(isAdmin);
                 return {...user, isAdmin};
             }
             return user;
         })
+}
+
+
+export async function addNewProduct(product,url) {
+    const id = uuid();
+    set(ref(database, `products/${id}`), {
+        ...product,
+        id : id,
+        price: parseInt(product.price),
+        image: url,
+        options: product.options.split(",").map((item)=>item.toUpperCase()),
+    });
 }
