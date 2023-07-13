@@ -32,12 +32,11 @@ export async function logout() {
 
 export async function onUserStateChanged(callback) {
     onAuthStateChanged(auth, async (user) => {
-        const updatedUser = user ? await adminUser(user) : null;
-        callback(updatedUser);
+        callback(user);
     });
 }
 
-async function adminUser(user) {
+export async function adminUser(user) {
     return get(ref(database), "admins")
         .then ((snapshot)=>{
             if(snapshot.exists()) {
