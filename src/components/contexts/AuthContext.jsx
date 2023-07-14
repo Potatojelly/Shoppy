@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { adminUser, login, logout, onUserStateChanged } from '../../api/firebase';
-
+import { addUserUid, adminUser, checkUserUid, login, logout, onUserStateChanged } from '../../api/firebase';
 const AuthContext = createContext();
 
 export function AuthContextProvider({children}) {
@@ -12,12 +11,24 @@ export function AuthContextProvider({children}) {
     useEffect(()=>{
         onUserStateChanged((user)=>{
             if(user) {
-                adminUser(user).then((user)=>setAuthState({user:user,loading:false}));
+                adminUser(user)
+                .then((user)=>{
+                    setAuthState({user:user,loading:false});
+                    checkUserUid(user.uid)
+                    .then((res)=>{
+                        if(!res) {
+                            addUserUid(user.uid);
+                        }
+                    });
+                })
+
             } else {
                 setAuthState({user:null,loading:false})
             }
         });
     },[])
+
+
 
     return <AuthContext.Provider value={{loading, user, login: login, logout:logout}}>
         {children}

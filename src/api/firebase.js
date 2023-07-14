@@ -49,6 +49,22 @@ export async function adminUser(user) {
         })
 }
 
+export async function checkUserUid(uid) {
+    return get(ref(database,"users"))
+        .then((snapshot)=>{
+            if(snapshot.exists()) {
+                const users = Object.keys(snapshot.val());
+                console.log(users);
+                const isUser = users.includes(uid)
+                return isUser;
+            }
+            return false;
+        })
+}
+
+export async function addUserUid(uid) {
+    set(ref(database,`users/${uid}`),{carts: ""});
+} 
 
 export async function addNewProduct(product,url) {
     const id = uuid();
@@ -58,6 +74,7 @@ export async function addNewProduct(product,url) {
         price: parseInt(product.price),
         image: url,
         options: product.options.split(",").map((item)=>item.toUpperCase()),
+        stock: parseInt(product.stock),
     });
 }
 
@@ -71,3 +88,7 @@ export async function getProducts() {
         })
 
 }
+
+// export async function addCart() {
+//     return set(ref(database,`users/${uid}`),)
+// }

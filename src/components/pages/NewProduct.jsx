@@ -70,6 +70,12 @@ export default function NewProduct() {
                     value={product.options ?? ""} 
                     placeholder="Product Options(seperated by comma(,))"
                     required onChange={handleChange}/>
+                <input 
+                    type="number" 
+                    name="Stock"
+                    value={product.stock ?? ""} 
+                    placeholder="Product Stock"
+                    required onChange={handleChange}/>    
                 <Button text={isUploading ? "Uploading..." : "Register a product"} disabled={isUploading}/>
             </form>
         </section>
