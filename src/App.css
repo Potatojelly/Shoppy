@@ -36,7 +36,3 @@
     transform: rotate(360deg);
   }
 }
-
-input {
-  @apply p-4 outline-none border border-gray-300 my-1;
-}

@@ -6,7 +6,7 @@ import { getAuth,
         signInWithPopup, 
         GoogleAuthProvider, 
         onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, get, set } from "firebase/database";
+import { getDatabase, ref, get, set} from "firebase/database";
 import {v4 as uuid} from "uuid";
 
 const firebaseConfig = {
@@ -38,11 +38,11 @@ export async function onUserStateChanged(callback) {
 }
 
 export async function adminUser(user) {
-    return get(ref(database), "admins")
+    return get(ref(database,"admins"))
         .then ((snapshot)=>{
             if(snapshot.exists()) {
                 const admins = snapshot.val();
-                const isAdmin = admins.admins.includes(user.uid)
+                const isAdmin = admins.includes(user.uid)
                 return {...user, isAdmin};
             }
             return user;
@@ -59,4 +59,17 @@ export async function addNewProduct(product,url) {
         image: url,
         options: product.options.split(",").map((item)=>item.toUpperCase()),
     });
+}
+
+export async function getProducts() {
+    return get(ref(database,"products"))
+        .then ((snapshot)=>{
+            if(snapshot.exists()) {
+                console.log(snapshot.val());
+                console.log(Object.values(snapshot.val()));
+                return Object.values(snapshot.val());
+            }
+            return [];
+        })
+
 }
