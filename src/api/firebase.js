@@ -71,34 +71,33 @@ export async function getProducts() {
         })
 }
 
-export async function addToCart(userId,product) {
+export async function addOrUpdateToCart(userId,product) {
+    console.log(userId);
+    console.log(product);
     return set(ref(database,`carts/${userId}/${product.id}`), product);
 }
 
-// export async function getCart(userId,callback) {
-//     onValue(ref(database,`carts/${userId}`), (snapshot) => {
-//             const carts = snapshot.val() || {};
-//             console.log("snapshot:compeleted");
-//             callback(carts);
-//     })
-// }
+export async function getCart(userId) {
+    return get(ref(database,`carts/${userId}`))
+        .then((snapshot) => {
+            const cart = snapshot.val() || {}
+            return Object.values(cart);
+        });
+}
 
-// export async function deleteFromCart(userId,productId) {
-//     remove(ref(database, `carts/${userId}/${productId}`));
-// }
+export async function deleteFromCart(userId,productId) {
+    remove(ref(database, `carts/${userId}/${productId}`));
+}
 
-
-
-// export async function getItemStock(id) {
-//     return get(ref(database, `products/${id}/stock`))
-//         .then((snapshot) => {
-//             if(snapshot.exists()) {
-//                 console.log(snapshot.val());
-//                 return snapshot.val();
-//             }
-//             return null; 
-//         })
-// }
+export async function getProductStock(productId) {
+    return get(ref(database, `products/${productId}/stock`))
+        .then((snapshot) => {
+            if(snapshot.exists()) {
+                return snapshot.val();
+            }
+            return null; 
+        });
+}
 
 
 // export async function updateQuantity(uid,id,qty) {

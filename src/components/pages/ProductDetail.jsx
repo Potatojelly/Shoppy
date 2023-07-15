@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useLocation} from "react-router-dom";
 import Button from "../UI/Button";
 import { useAuthContext } from '../../contexts/AuthContext';
-import { addToCart } from '../../api/firebase';
+import { addOrUpdateToCart } from '../../api/firebase';
 
 export default function ProductDetail() {
     const {state: {product}} =useLocation();
@@ -27,7 +27,7 @@ export default function ProductDetail() {
     
     const addProductToCart = () => {
         const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected};
-        addToCart(uid,product).then(()=>{
+        addOrUpdateToCart(uid,product).then(()=>{
             setSuccess("Product has been added");
             setTimeout(()=>setSuccess(null),4000);
         });
