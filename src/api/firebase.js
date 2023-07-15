@@ -6,7 +6,7 @@ import { getAuth,
         signInWithPopup, 
         GoogleAuthProvider, 
         onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, get, set} from "firebase/database";
+import { getDatabase, ref, get, set, remove, onValue, push, update} from "firebase/database";
 import {v4 as uuid} from "uuid";
 
 const firebaseConfig = {
@@ -49,23 +49,6 @@ export async function adminUser(user) {
         })
 }
 
-export async function checkUserUid(uid) {
-    return get(ref(database,"users"))
-        .then((snapshot)=>{
-            if(snapshot.exists()) {
-                const users = Object.keys(snapshot.val());
-                console.log(users);
-                const isUser = users.includes(uid)
-                return isUser;
-            }
-            return false;
-        })
-}
-
-export async function addUserUid(uid) {
-    set(ref(database,`users/${uid}`),{carts: ""});
-} 
-
 export async function addNewProduct(product,url) {
     const id = uuid();
     return set(ref(database, `products/${id}`), {
@@ -86,9 +69,40 @@ export async function getProducts() {
             }
             return [];
         })
-
 }
 
-// export async function addCart() {
-//     return set(ref(database,`users/${uid}`),)
+export async function addToCart(userId,product) {
+    return set(ref(database,`carts/${userId}/${product.id}`), product);
+}
+
+// export async function getCart(userId,callback) {
+//     onValue(ref(database,`carts/${userId}`), (snapshot) => {
+//             const carts = snapshot.val() || {};
+//             console.log("snapshot:compeleted");
+//             callback(carts);
+//     })
+// }
+
+// export async function deleteFromCart(userId,productId) {
+//     remove(ref(database, `carts/${userId}/${productId}`));
+// }
+
+
+
+// export async function getItemStock(id) {
+//     return get(ref(database, `products/${id}/stock`))
+//         .then((snapshot) => {
+//             if(snapshot.exists()) {
+//                 console.log(snapshot.val());
+//                 return snapshot.val();
+//             }
+//             return null; 
+//         })
+// }
+
+
+// export async function updateQuantity(uid,id,qty) {
+//     const newQty = {[`users/${uid}/carts/${id}/quantity`] : qty};
+//     update(ref(database), newQty);
+
 // }

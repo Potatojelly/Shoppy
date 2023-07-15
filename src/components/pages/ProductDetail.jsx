@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
 import {useLocation} from "react-router-dom";
 import Button from "../UI/Button";
-import { useAuthContext } from '../contexts/AuthContext';
+import { useAuthContext } from '../../contexts/AuthContext';
+import { addToCart } from '../../api/firebase';
 
 export default function ProductDetail() {
-    const  {state: {product: {id, image, title, description, category, price, options, stock}}} = useLocation();
-    const {user} = useAuthContext();
-    const [selected,setSelected] = useState(options && options[0]);
-    const [quantity,setQuantity] = useState(stock && 1);
-    const [added,setAdded] = useState(false);
+    const {state: {product}} =useLocation();
+    const {state: {product: {id, image, title, description, category, price, options, stock}}} = useLocation();
+    const {uid} = useAuthContext();
+    const [optionSelected,setOptionSelected] = useState(options && options[0]);
+    const [quantitySelected,setQuantitySelected] = useState(stock && 1);
+    const [success,setSuccess] = useState();
     const stocks = [];
     
     for(let i = 1; i <= stock; i++) {
         stocks.push(<option key={i} value={i}>{i}</option>);
     }
 
-    const handleSelect = (e) => {
-        setSelected(e.target.value);
+    const handleOptionSelect = (e) => {
+        setOptionSelected(e.target.value);
+    }
+
+    const handleQuantitySelect = (e) => {
+        setQuantitySelected(e.target.value);
     }
     
-    const addToCart = () => {
-
+    const addProductToCart = () => {
+        const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected};
+        addToCart(uid,product).then(()=>{
+            setSuccess("Product has been added");
+            setTimeout(()=>setSuccess(null),4000);
+        });
     }
     
     return (
@@ -36,7 +46,7 @@ export default function ProductDetail() {
                         <label className="text-brand font-bold" htmlFor='options'>Options:</label>
                         <select
                             className="p-2 m-4 flex-1 border-2 border-dashed border-brand outline-none" 
-                            id="options" onChange={handleSelect} value={selected}>
+                            id="options" onChange={handleOptionSelect} value={optionSelected}>
                             {options && options.map((option,index)=><option key={index} value={option}>{option}</option>)}
                         </select>
                     </div>
@@ -44,11 +54,12 @@ export default function ProductDetail() {
                         <label className="text-brand font-bold" htmlFor='quantity'>Qty:</label>
                         <select
                             className="ml-1 flex-1  border-2 border-dashed border-brand outline-none" 
-                            id="quantity" onChange={handleSelect} value={selected}>
+                            id="quantity" onChange={handleQuantitySelect} value={quantitySelected}>
                             {stock && [stocks]}
                         </select>
                     </div>
-                    <Button text="Add to Cart" onClick={addToCart}></Button>
+                    {success && <p className="my-2"> ✅ {success}</p>}
+                    <Button text="Add to Cart" onClick={addProductToCart}></Button>
                 </div>
             </section>
         </>
