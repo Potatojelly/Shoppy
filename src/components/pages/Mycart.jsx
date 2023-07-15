@@ -27,7 +27,7 @@ export default function Mycart() {
                     <FaEquals className="shrink-0" />
                     <PriceCard text="Total Price" price={totalPrice + SHIPPING}/>
                 </div>
-                <Button text={"Order"}/>
+                <Button text={"Order"} className=""/>
             </>    
             )}
         </section>
