@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { deleteFromCart, getProductStock } from '../../api/firebase';
 import { useCart } from '../../hooks/useCart';
+import {AiOutlineMinusSquare,AiOutlinePlusSquare} from "react-icons/ai"
+import {RiDeleteBin5Fill} from "react-icons/ri"
 
 export default function CartCard({uid, cart, cart: {id, image, title, option, price, quantity}}) {
     const [currentStock,setCurrentStock] = useState();
@@ -35,21 +37,22 @@ export default function CartCard({uid, cart, cart: {id, image, title, option, pr
 
     return (
         <li className="flex justify-between my-2 items-center">
-            {qtyLimitAlarm && <div className="border-2 w-30 h-20 fixed inset-y-1/2 rounded-lg">
+            {qtyLimitAlarm && 
+            <div className="border-2 w-30 h-20 fixed inset-y-1/2 rounded-lg">
                 <span>{`${title}'s current stock is ${currentStock}`}</span>
             </div>}
-            <img src={image} alt={title} />
-            <div className="flex w-3/5 justify-between items-center">
-                <div>
-                    <h2>{title}</h2>
-                    <h2>{option}</h2>
+            <img className="w-24 md:w-48 rounded-lg" src={image} alt={title} />
+            <div className="flex flex-1 justify-between ml-4">
+                <div className="basis-3/5">
+                    <p className="text-lg">{title}</p>
+                    <p className="text-xl font-bold text-brand">{option}</p>
                     <p>${price}</p>
                 </div>
-                <div>
-                    <button className="border-2 m-2 w-8" onClick={handleMinus}>-</button>
-                    {quantity}
-                    <button className="border-2 m-2 w-8" onClick={handlePlus} disabled={qtyLimitAlarm}>+</button>
-                    <button onClick={handleDelete}>Trash</button>
+                <div className="text-2xl flex items-center">
+                    <AiOutlineMinusSquare className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" onClick={handleMinus}/>
+                    <span className="box-border pb-1">{quantity}</span>
+                    <AiOutlinePlusSquare className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" onClick={handlePlus}/>
+                    <RiDeleteBin5Fill className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" onClick={handleDelete}/>
                 </div>
             </div>
         </li>
