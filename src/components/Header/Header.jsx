@@ -13,7 +13,7 @@ export default function Header() {
 
     return (
         <header className="flex justify-between border-b border-gray-300 p-2">
-            <Link to="/" className="flex items-center text-4xl text-brand">
+            <Link to="/" className="flex items-center text-xl text-brand md:text-4xl ">
                 <FiShoppingBag/>
                 <h1>Yoon's Shoppy</h1>
             </Link>
