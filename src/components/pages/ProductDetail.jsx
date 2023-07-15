@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {useLocation} from "react-router-dom";
 import Button from "../UI/Button";
 import { useAuthContext } from '../../contexts/AuthContext';
-import { addOrUpdateToCart } from '../../api/firebase';
 import { useCart } from '../../hooks/useCart';
 
 export default function ProductDetail() {
     const {state: {product}} =useLocation();
     const {state: {product: {id, image, title, description, category, price, options, stock}}} = useLocation();
-    const {uid} = useAuthContext();
+    const {user} = useAuthContext();
     const [optionSelected,setOptionSelected] = useState(options && options[0]);
     const [quantitySelected,setQuantitySelected] = useState(stock && 1);
     const [success,setSuccess] = useState();
     const {updateCart} = useCart();
+    const [loginAlarm, setLoginAlarm] = useState();
     const stocks = [];
     
     for(let i = 1; i <= stock; i++) {
@@ -28,6 +28,11 @@ export default function ProductDetail() {
     }
     
     const addProductToCart = () => {
+        if(!user) {
+            setLoginAlarm(prev => !prev);
+            setTimeout(()=>setLoginAlarm(null),4000);
+            return;
+        }
         const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected};
         updateCart.mutate(product,{
             onSuccess: () => {
@@ -40,8 +45,8 @@ export default function ProductDetail() {
     return (
         <>
             <p className="mx-12 mt-4 text-gray-700">{category}</p>
-            <section className="flex flex-col md:flex-row p-4">
-                <img className="w-full px-4 basis-7/12" src={image} alt={title} />
+            <section className="flex flex-col md:flex-row p-4 relative">
+                <img className="w-full px-4 basis-8/12" src={image} alt={title} />
                 <div className="w-full basis-5/12 flex flex-col p-4">
                     <h2 className="text-3xl font-bold py-2">{title}</h2>
                     <p className="text-2xl font-bold py-2 border-b border-gray-400">{`$${price}`}</p>
@@ -63,6 +68,7 @@ export default function ProductDetail() {
                         </select>
                     </div>
                     {success && <p className="my-2"> ✅ {success}</p>}
+                    {loginAlarm && <span className="my-2 font-bold text-red-600" >❌ You can put it in your shopping cart after logging in</span>}
                     <Button text="Add to Cart" onClick={addProductToCart}></Button>
                 </div>
             </section>
