@@ -35,10 +35,6 @@ export default function CartCard({cart, cart: {id, image, title, option, price, 
 
     return (
         <li className="flex justify-between my-2 items-center">
-            {qtyLimitAlarm && 
-            <div className="border-2 w-30 h-20 fixed inset-y-1/2 rounded-lg">
-                <span>{`${title}'s current stock is ${currentStock}`}</span>
-            </div>}
             <img className="w-24 md:w-48 rounded-lg" src={image} alt={title} />
             <div className="flex flex-1 justify-between ml-4">
                 <div className="basis-3/5">
@@ -46,10 +42,16 @@ export default function CartCard({cart, cart: {id, image, title, option, price, 
                     <p className="text-xl font-bold text-brand">{option}</p>
                     <p>${price}</p>
                 </div>
+                {qtyLimitAlarm && 
+                <div className="border-2 w-48 h-20 text-center leading-6 rounded-lg font-bold border-red-400">
+                    <span>{`${title}'s current stock is ${currentStock}`}</span>
+                </div>}
                 <div className="text-2xl flex items-center">
                     <AiOutlineMinusSquare className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" onClick={handleMinus}/>
                     <span className="box-border pb-1">{quantity}</span>
-                    <AiOutlinePlusSquare className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" onClick={handlePlus}/>
+                    <button className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" disabled={qtyLimitAlarm} onClick={handlePlus}>
+                        <AiOutlinePlusSquare/>
+                    </button>
                     <RiDeleteBin5Fill className="transition-all cursor-pointer hover:text-brand hover:scale-105 mx-1" onClick={handleDelete}/>
                 </div>
             </div>
