@@ -5,8 +5,6 @@ import CartCard from "../CartCard/CartCard";
 export default function Mycart() {
     const {uid, cartQuery:{isLoading, error, data: carts}} = useCart();
 
-    console.log(carts && carts);
-
     return (
         <>
             <h1>My Carts</h1>

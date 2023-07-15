@@ -3,6 +3,7 @@ import {useLocation} from "react-router-dom";
 import Button from "../UI/Button";
 import { useAuthContext } from '../../contexts/AuthContext';
 import { addOrUpdateToCart } from '../../api/firebase';
+import { useCart } from '../../hooks/useCart';
 
 export default function ProductDetail() {
     const {state: {product}} =useLocation();
@@ -11,6 +12,7 @@ export default function ProductDetail() {
     const [optionSelected,setOptionSelected] = useState(options && options[0]);
     const [quantitySelected,setQuantitySelected] = useState(stock && 1);
     const [success,setSuccess] = useState();
+    const {updateCart} = useCart();
     const stocks = [];
     
     for(let i = 1; i <= stock; i++) {
@@ -27,10 +29,12 @@ export default function ProductDetail() {
     
     const addProductToCart = () => {
         const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected};
-        addOrUpdateToCart(uid,product).then(()=>{
-            setSuccess("Product has been added");
-            setTimeout(()=>setSuccess(null),4000);
-        });
+        updateCart.mutate({uid,product},{
+            onSuccess: () => {
+                setSuccess("Product has been added");
+                setTimeout(()=>setSuccess(null),4000); 
+            }
+        })
     }
     
     return (

@@ -72,8 +72,6 @@ export async function getProducts() {
 }
 
 export async function addOrUpdateToCart(userId,product) {
-    console.log(userId);
-    console.log(product);
     return set(ref(database,`carts/${userId}/${product.id}`), product);
 }
 

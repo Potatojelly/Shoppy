@@ -5,6 +5,7 @@ import {FaPencilAlt} from "react-icons/fa";
 import User from '../User/User';
 import Button from '../UI/Button';
 import { useAuthContext } from '../../contexts/AuthContext';
+import CartStatus from '../UI/CartStatus';
 
 
 export default function Header() {
@@ -18,7 +19,10 @@ export default function Header() {
             </Link>
             <nav className="flex items-center gap-4 font-semibold">
                 <Link to="products">Products</Link>
-                {user && <Link to="carts">Carts</Link>}
+                {user && 
+                    <Link to="carts">
+                        <CartStatus/>
+                    </Link>}
                 {user && user.isAdmin && <Link to="products/new" className="text-2xl">
                     <FaPencilAlt/>
                 </Link>}

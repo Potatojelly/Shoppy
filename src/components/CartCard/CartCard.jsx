@@ -5,7 +5,7 @@ import { useCart } from '../../hooks/useCart';
 export default function CartCard({uid, cart, cart: {id, image, title, option, price, quantity}}) {
     const [currentStock,setCurrentStock] = useState();
     const [qtyLimitAlarm, setQtyLimitAlarm] = useState(false);
-    const {updateCart} = useCart();
+    const {updateCart, removeCart} = useCart();
 
     useEffect(()=>{
         getProductStock(id).then((result)=>{setCurrentStock(result)});
@@ -29,10 +29,10 @@ export default function CartCard({uid, cart, cart: {id, image, title, option, pr
     }
 
     const handleDelete = () => {
-        deleteFromCart(uid, id);
+        const productId = id;
+        removeCart.mutate({uid,productId});
     }
 
-    console.log(currentStock && currentStock);
     return (
         <li className="flex justify-between my-2 items-center">
             {qtyLimitAlarm && <div className="border-2 w-30 h-20 fixed inset-y-1/2 rounded-lg">
