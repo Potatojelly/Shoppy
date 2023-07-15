@@ -4,7 +4,7 @@ import { useCart } from '../../hooks/useCart';
 import {AiOutlineMinusSquare,AiOutlinePlusSquare} from "react-icons/ai"
 import {RiDeleteBin5Fill} from "react-icons/ri"
 
-export default function CartCard({uid, cart, cart: {id, image, title, option, price, quantity}}) {
+export default function CartCard({cart, cart: {id, image, title, option, price, quantity}}) {
     const [currentStock,setCurrentStock] = useState();
     const [qtyLimitAlarm, setQtyLimitAlarm] = useState(false);
     const {updateCart, removeCart} = useCart();
@@ -16,7 +16,7 @@ export default function CartCard({uid, cart, cart: {id, image, title, option, pr
     const handleMinus = () => {
         if(quantity === 1) return;
         const product = {...cart, quantity: parseInt(quantity)-1};
-        updateCart.mutate({uid,product});
+        updateCart.mutate(product);
     }
 
     const handlePlus = () => {
@@ -26,13 +26,11 @@ export default function CartCard({uid, cart, cart: {id, image, title, option, pr
             return;
         }
         const product = {...cart, quantity: parseInt(quantity)+1};
-        console.log(product);
-        updateCart.mutate({uid,product});
+        updateCart.mutate(product);
     }
 
     const handleDelete = () => {
-        const productId = id;
-        removeCart.mutate({uid,productId});
+        removeCart.mutate(id);
     }
 
     return (

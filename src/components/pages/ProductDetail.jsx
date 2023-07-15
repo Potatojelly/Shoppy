@@ -29,7 +29,7 @@ export default function ProductDetail() {
     
     const addProductToCart = () => {
         const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected};
-        updateCart.mutate({uid,product},{
+        updateCart.mutate(product,{
             onSuccess: () => {
                 setSuccess("Product has been added");
                 setTimeout(()=>setSuccess(null),4000); 

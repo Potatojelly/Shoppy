@@ -8,9 +8,9 @@ export function useCart() {
 
     const cartQuery = useQuery([`${uid}/carts`],()=>getCart(uid),{staleTime:1000 * 60 * 3});
 
-    const updateCart = useMutation(({uid,product})=>{addOrUpdateToCart(uid,product)},{onSuccess: () => queryClient.invalidateQueries([`${uid}/carts`])});
+    const updateCart = useMutation((product)=>{addOrUpdateToCart(uid,product)},{onSuccess: () => queryClient.invalidateQueries([`${uid}/carts`])});
 
-    const removeCart = useMutation(({uid,productId})=>{deleteFromCart(uid,productId)},{onSuccess: () => queryClient.invalidateQueries([`${uid}/carts`])});
+    const removeCart = useMutation((productId)=>{deleteFromCart(uid,productId)},{onSuccess: () => queryClient.invalidateQueries([`${uid}/carts`])});
    
     return({uid, cartQuery, updateCart, removeCart});
 }

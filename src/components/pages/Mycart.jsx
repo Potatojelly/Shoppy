@@ -6,9 +6,9 @@ import {FaEquals} from "react-icons/fa";
 import PriceCard from '../UI/PriceCard';
 import Button from "../UI/Button";
 
-const SHIPPING = 3000;
+const SHIPPING = 10;
 export default function Mycart() {
-    const {uid, cartQuery:{isLoading, error, data: carts}} = useCart();
+    const {cartQuery:{isLoading, error, data: carts}} = useCart();
     const totalPrice = carts && carts.reduce((prev,current)=>prev + parseInt(current.price) * current.quantity,0)
     return (
         <section className="p-8 flex flex-col">
@@ -18,7 +18,7 @@ export default function Mycart() {
             (
             <>    
                 <ul className="mb-8 pb-4 px-8 border-b border-gray-300">
-                    {carts && carts.map((cart,index)=>(<CartCard key={index} uid={uid} cart={cart}/>))}
+                    {carts && carts.map((cart,index)=>(<CartCard key={index} cart={cart}/>))}
                 </ul>
                 <div className="flex justify-between items-center px-2 mb-4 md:px-8 lg:px-16">
                     <PriceCard text="Product Total" price={totalPrice}/>
