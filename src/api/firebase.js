@@ -71,9 +71,22 @@ export async function getProducts() {
         })
 }
 
-export async function addOrUpdateToCart(userId,product) {
-    return set(ref(database,`carts/${userId}/${product.id}`), product);
+export async function addToCart(userId,product) {
+    return get(ref(database,`carts/${userId}/${product.id}`))
+            .then((snapshot) => {
+                if(snapshot.exists()) {
+                    const updatedQty =  parseInt(snapshot.val().quantity) + parseInt(product.quantity) <= parseInt(product.stock) ?
+                                        parseInt(snapshot.val().quantity) + parseInt(product.quantity) : product.stock;
+                    const updatedProduct = {...product, quantity: updatedQty}
+                    return set(ref(database,`carts/${userId}/${product.id}`), updatedProduct);
+                }
+                return set(ref(database,`carts/${userId}/${product.id}`), product);
+            });
 }
+
+export async function updateToCart(userId,product) {
+    set(ref(database,`carts/${userId}/${product.id}`), product);
+} 
 
 export async function getCart(userId) {
     return get(ref(database,`carts/${userId}`))
@@ -96,10 +109,3 @@ export async function getProductStock(productId) {
             return null; 
         });
 }
-
-
-// export async function updateQuantity(uid,id,qty) {
-//     const newQty = {[`users/${uid}/carts/${id}/quantity`] : qty};
-//     update(ref(database), newQty);
-
-// }

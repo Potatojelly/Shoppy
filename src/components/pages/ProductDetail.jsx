@@ -11,7 +11,7 @@ export default function ProductDetail() {
     const [optionSelected,setOptionSelected] = useState(options && options[0]);
     const [quantitySelected,setQuantitySelected] = useState(stock && 1);
     const [success,setSuccess] = useState();
-    const {updateCart} = useCart();
+    const {addCart} = useCart();
     const [loginAlarm, setLoginAlarm] = useState();
     const stocks = [];
     
@@ -33,8 +33,8 @@ export default function ProductDetail() {
             setTimeout(()=>setLoginAlarm(null),4000);
             return;
         }
-        const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected};
-        updateCart.mutate(product,{
+        const product = {id, image, title, price, option: optionSelected, quantity: quantitySelected, stock};
+        addCart.mutate(product,{
             onSuccess: () => {
                 setSuccess("Product has been added");
                 setTimeout(()=>setSuccess(null),4000); 
