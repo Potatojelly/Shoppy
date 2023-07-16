@@ -25,3 +25,14 @@ code {
 input {
   @apply p-4 outline-none border border-gray-300 my-1;
 }
+
+@layer base {
+  button[aria-current='page']{
+    @apply bg-ariaColor;
+  }
+
+  button[disabled]{
+    @apply bg-gray-400 pointer-events-none;
+  }
+}
+
