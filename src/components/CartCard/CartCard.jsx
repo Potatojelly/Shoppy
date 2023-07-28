@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { deleteFromCart, getProductStock } from '../../api/firebase';
+import { getProductStock } from '../../api/firebase';
 import { useCart } from '../../hooks/useCart';
 import {AiOutlineMinusSquare,AiOutlinePlusSquare} from "react-icons/ai"
 import {RiDeleteBin5Fill} from "react-icons/ri"
@@ -11,7 +11,7 @@ export default function CartCard({cart, cart: {id, image, title, option, price, 
 
     useEffect(()=>{
         getProductStock(id).then((result)=>{setCurrentStock(result)});
-    },[])
+    },[id])
 
     const handleMinus = () => {
         if(quantity === 1) return;

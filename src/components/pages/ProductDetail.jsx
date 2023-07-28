@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {useLocation} from "react-router-dom";
 import Button from "../UI/Button";
 import { useAuthContext } from '../../contexts/AuthContext';
 import { useCart } from '../../hooks/useCart';
 
 export default function ProductDetail() {
-    const {state: {product}} =useLocation();
     const {state: {product: {id, image, title, description, category, price, options, stock}}} = useLocation();
     const {user} = useAuthContext();
     const [optionSelected,setOptionSelected] = useState(options && options[0]);

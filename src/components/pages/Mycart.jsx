@@ -8,7 +8,7 @@ import Button from "../UI/Button";
 
 const SHIPPING = 10;
 export default function Mycart() {
-    const {cartQuery:{isLoading, error, data: carts}} = useCart();
+    const {cartQuery:{data: carts}} = useCart();
     const totalPrice = carts && carts.reduce((prev,current)=>prev + parseInt(current.price) * current.quantity,0)
     return (
         <section className="p-8 flex flex-col">

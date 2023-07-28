@@ -6,7 +6,7 @@ import { getAuth,
         signInWithPopup, 
         GoogleAuthProvider, 
         onAuthStateChanged } from "firebase/auth";
-import { getDatabase, ref, get, set, remove, onValue, push, update} from "firebase/database";
+import { getDatabase, ref, get, set, remove } from "firebase/database";
 import {v4 as uuid} from "uuid";
 
 const firebaseConfig = {
